@@ -1,0 +1,14 @@
+---
+version: "3"
+services:
+  server:
+    build: .
+    container_name: "fiber-react-test-server"
+    environment:
+      - PROD_MODE=production
+    ports:
+      - "5173:5173"
+      - "3000:3000"
+
+volumes:
+  db:
