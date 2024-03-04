@@ -1,0 +1,16 @@
+---
+version: "3"
+services:
+  frontend_server:
+    build: ./frontend
+    expose:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/frontend
+  backend_server:
+    build: .
+    ports:
+      - "3000:3000"
+
+volumes:
+  db:
