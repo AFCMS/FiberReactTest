@@ -53,7 +53,6 @@ WORKDIR /app
 
 COPY --from=builder /app/FiberReactTest .
 COPY --from=builder /app/index.html .
-RUN mkdir -p /app/frontend/dist
 COPY --from=frontend-builder /frontend/dist /app/frontend/dist
 
 USER appuser:appuser
