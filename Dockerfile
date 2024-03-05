@@ -8,8 +8,6 @@ ARG TARGETARCH
 
 ENV GOCACHE=/root/.cache/go-build
 
-# Install build dependencies
-RUN apk add --no-cache git make build-base
 WORKDIR /app
 
 # Download Go modules
