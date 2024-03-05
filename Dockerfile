@@ -38,10 +38,25 @@ RUN npm run build
 
 # Production Image
 FROM alpine:3.19 as production
-COPY --from=builder /app/FiberReactTest /
-COPY --from=builder /app/index.html /
-RUN mkdir -p /frontend/dist
-COPY --from=frontend-builder /frontend/dist /frontend/dist
+
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "10001" \
+    "appuser"
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY --from=builder /app/FiberReactTest .
+COPY --from=builder /app/index.html .
+RUN mkdir -p /app/frontend/dist
+COPY --from=frontend-builder /frontend/dist /app/frontend/dist
+
+USER appuser:appuser
 
 EXPOSE 8080
 CMD ["./FiberReactTest"]
