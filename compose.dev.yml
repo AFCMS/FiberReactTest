@@ -14,6 +14,3 @@ services:
     environment:
       - FIBER_REACT_DEV_MODE=true
       - FIBER_REACT_FRONTEND_SERVER=http://frontend_server:5173
-
-volumes:
-  db:

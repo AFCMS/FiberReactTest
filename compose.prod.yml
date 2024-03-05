@@ -8,6 +8,3 @@ services:
       - FIBER_REACT_GOOGLE_SITE_VERIFICATION=dummy_non_working
     ports:
       - "3000:3000"
-
-volumes:
-  db:
