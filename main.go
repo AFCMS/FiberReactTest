@@ -29,13 +29,14 @@ func main() {
 	})
 
 	if DevMode {
-		app.Get("*", proxy.BalancerForward([]string{FrontendDevServer}))
-		app.Get("/", func(c *fiber.Ctx) error {
+		templateHandler := func(c *fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
 				"Title":   "Test",
 				"DevMode": DevMode,
 			})
-		})
+		}
+		app.Get("*", proxy.BalancerForward([]string{FrontendDevServer}), templateHandler)
+		app.Get("/", templateHandler)
 	} else {
 		// Parse JSON Vite manifest
 		manifest := map[string]Chunk{}
@@ -48,7 +49,7 @@ func main() {
 		}
 
 		app.Static("/", "./frontend/dist")
-		app.Get("/", func(c *fiber.Ctx) error {
+		app.Get("*", func(c *fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
 				"Title":                  "Test",
 				"DevMode":                DevMode,
