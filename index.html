@@ -17,15 +17,21 @@
         window.__vite_plugin_react_preamble_installed__ = true
     </script>
     <script type="module" src="/@vite/client"></script>
-    {{else}}
+    {{end}}
 
+    {{if .GoogleSiteVerification}}
+    <!--Verification key used to prove the ownership of the site in the Google Search Console-->
+    <meta
+            name="google-site-verification"
+            content="{{ .GoogleSiteVerification }}"
+    />
     {{end}}
 </head>
 <body>
 <div id="root"></div>
 {{if .DevMode}}
 {{else}}
-<link rel="stylesheet" href="/{{ .MainCSS }}" />
+<link rel="stylesheet" href="/{{ .MainCSS }}"/>
 <script type="module" src="/{{ .MainJS }}"></script>
 {{end}}
 </body>

@@ -13,6 +13,7 @@ import (
 func main() {
 	DevMode := os.Getenv("FIBER_REACT_DEV_MODE") == "true"
 	FrontendDevServer := os.Getenv("FIBER_REACT_FRONTEND_SERVER")
+	GoogleSiteVerification := os.Getenv("FIBER_REACT_GOOGLE_SITE_VERIFICATION")
 
 	engine := html.New("./", ".html")
 	app := fiber.New(fiber.Config{
@@ -49,10 +50,11 @@ func main() {
 		app.Static("/", "./frontend/dist")
 		app.Get("/", func(c *fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
-				"Title":   "Test",
-				"DevMode": DevMode,
-				"MainCSS": manifest["src/main.tsx"].Css[0],
-				"MainJS":  manifest["src/main.tsx"].File,
+				"Title":                  "Test",
+				"DevMode":                DevMode,
+				"MainCSS":                manifest["src/main.tsx"].Css[0],
+				"MainJS":                 manifest["src/main.tsx"].File,
+				"GoogleSiteVerification": GoogleSiteVerification,
 			})
 		})
 	}

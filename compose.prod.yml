@@ -5,6 +5,7 @@ services:
     image: ghcr.io/afcms/fiberreacttest:master
     environment:
       - FIBER_REACT_DEV_MODE=false
+      - FIBER_REACT_GOOGLE_SITE_VERIFICATION=dummy_non_working
     ports:
       - "3000:3000"
 
