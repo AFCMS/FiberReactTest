@@ -10,16 +10,15 @@ import (
 	"os"
 )
 
-const DevMode = true
-
 func main() {
+	DevMode := os.Getenv("FIBER_REACT_DEV_MODE") == "true"
+	FrontendDevServer := os.Getenv("FIBER_REACT_FRONTEND_SERVER")
+
 	engine := html.New("./", ".html")
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
 	app.Use(flogger.New())
-
-	app.Get("/gif", proxy.Forward("https://i.imgur.com/IWaBepg.gif"))
 
 	// API
 	api := app.Group("/api")
@@ -29,7 +28,7 @@ func main() {
 	})
 
 	if DevMode {
-		app.Get("*", proxy.BalancerForward([]string{"http://frontend_server:5173"}))
+		app.Get("*", proxy.BalancerForward([]string{FrontendDevServer}))
 		app.Get("/", func(c *fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
 				"Title":   "Test",
@@ -48,7 +47,6 @@ func main() {
 		}
 
 		app.Static("/", "./frontend/dist")
-		//app.Static("*", "./frontend/dist/index.html")
 		app.Get("/", func(c *fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
 				"Title":   "Test",
