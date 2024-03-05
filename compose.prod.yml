@@ -1,0 +1,12 @@
+---
+version: "3"
+services:
+  server:
+    image: ghcr.io/afcms/fiberreacttest:master
+    environment:
+      - FIBER_REACT_DEV_MODE=false
+    ports:
+      - "3000:3000"
+
+volumes:
+  db:
