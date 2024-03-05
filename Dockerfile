@@ -38,7 +38,6 @@ RUN npm run build
 
 # Production Image
 FROM alpine:3.19 as production
-RUN apk update && apk add --no-cache optipng
 COPY --from=builder /app/FiberReactTest /
 COPY --from=builder /app/index.html /
 RUN mkdir -p /frontend/dist
