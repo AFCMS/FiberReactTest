@@ -5,6 +5,6 @@ WORKDIR /frontend
 
 COPY ./package.json ./
 COPY ./package-lock.json ./
-RUN --mount=type=cache,id=npmmod,target="/root/.npm" npm ci
+RUN --mount=type=cache,id=npmmod,target="/root/.npm" npm install --include=dev
 
 CMD ["npm", "run", "dev"]
