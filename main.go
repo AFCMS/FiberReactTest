@@ -28,6 +28,10 @@ func main() {
 		return c.SendString("Hello, World!")
 	})
 
+	api.All("*", func(ctx *fiber.Ctx) error {
+		return ctx.Status(404).SendString("Not Found")
+	})
+
 	if DevMode {
 		templateHandler := func(c *fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
