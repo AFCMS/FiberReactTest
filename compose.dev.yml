@@ -6,7 +6,9 @@ services:
     expose:
       - "5173:5173"
     volumes:
-      - ./frontend:/frontend
+      - type: bind
+        source: ./frontend
+        target: /frontend
   backend_server:
     build: .
     ports:
