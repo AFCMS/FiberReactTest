@@ -48,14 +48,11 @@ RUN adduser \
     --uid "10001" \
     "appuser"
 
-RUN mkdir /app
-WORKDIR /app
-
-COPY --from=builder /app/FiberReactTest .
-COPY --from=builder /app/index.html .
+COPY --from=builder /app/FiberReactTest /app/
+COPY --from=builder /app/index.html /app/
 COPY --from=frontend-builder /frontend/dist /app/frontend/dist
 
 USER appuser:appuser
 
 EXPOSE 8080
-CMD ["./FiberReactTest"]
+CMD ["/app/FiberReactTest"]
