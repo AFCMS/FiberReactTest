@@ -39,8 +39,8 @@ func main() {
 				"DevMode": DevMode,
 			})
 		}
-		app.Get("*", proxy.BalancerForward([]string{FrontendDevServer}), templateHandler)
-		app.Get("/", templateHandler)
+		app.Get("*", proxy.BalancerForward([]string{FrontendDevServer}))
+		app.Get("*", templateHandler)
 	} else {
 		// Parse JSON Vite manifest
 		manifest := map[string]Chunk{}
