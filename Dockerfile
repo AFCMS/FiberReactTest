@@ -54,4 +54,6 @@ COPY --from=frontend-builder /frontend/dist /app/frontend/dist
 USER appuser:appuser
 
 EXPOSE 8080
-CMD ["/app/FiberReactTest"]
+
+WORKDIR /app
+CMD ["./FiberReactTest"]
