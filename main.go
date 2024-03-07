@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/gofiber/fiber/v2"
-	flogger "github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/proxy"
+	"github.com/gofiber/fiber/v3"
+	flogger "github.com/gofiber/fiber/v3/middleware/logger"
+	"github.com/gofiber/fiber/v3/middleware/proxy"
 	"github.com/gofiber/template/html/v2"
 	"log"
 	"os"
@@ -24,16 +24,16 @@ func main() {
 	// API
 	api := app.Group("/api")
 
-	api.Get("/test", func(c *fiber.Ctx) error {
+	api.Get("/test", func(c fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
 
-	api.All("*", func(ctx *fiber.Ctx) error {
+	api.All("*", func(ctx fiber.Ctx) error {
 		return ctx.Status(404).SendString("Not Found")
 	})
 
 	if DevMode {
-		templateHandler := func(c *fiber.Ctx) error {
+		templateHandler := func(c fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
 				"Title":   "Test",
 				"DevMode": DevMode,
@@ -53,7 +53,7 @@ func main() {
 		}
 
 		app.Static("/", "./frontend/dist")
-		app.Get("*", func(c *fiber.Ctx) error {
+		app.Get("*", func(c fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
 				"Title":                  "Test",
 				"DevMode":                DevMode,
