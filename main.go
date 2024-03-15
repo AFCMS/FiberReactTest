@@ -15,7 +15,7 @@ func main() {
 	FrontendDevServer := os.Getenv("FIBER_REACT_FRONTEND_SERVER")
 	GoogleSiteVerification := os.Getenv("FIBER_REACT_GOOGLE_SITE_VERIFICATION")
 
-	engine := html.New("./", ".html")
+	engine := html.New("./", ".gohtml")
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})

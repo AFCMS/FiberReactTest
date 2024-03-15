@@ -48,7 +48,7 @@ RUN adduser \
     "appuser"
 
 COPY --from=builder /app/FiberReactTest /app/
-COPY --from=builder /app/index.html /app/
+COPY --from=builder /app/index.gohtml /app/
 COPY --from=frontend-builder /frontend/dist /app/frontend/dist
 
 USER appuser:appuser
