@@ -33,14 +33,18 @@ func main() {
 	})
 
 	if DevMode {
-		templateHandler := func(c fiber.Ctx) error {
-			return c.Render("index", fiber.Map{
-				"Title":   "Test",
-				"DevMode": DevMode,
-			})
-		}
-		app.Get("*", proxy.BalancerForward([]string{FrontendDevServer}))
-		app.Get("*", templateHandler)
+		app.Get("*", proxy.Balancer(proxy.Config{
+			Servers: []string{FrontendDevServer},
+			ModifyResponse: func(c fiber.Ctx) error {
+				if c.Response().StatusCode() == fiber.StatusNotFound {
+					return c.Status(fiber.StatusOK).Render("index", fiber.Map{
+						"Title":   "Test",
+						"DevMode": DevMode,
+					})
+				}
+				return nil
+			},
+		}))
 	} else {
 		// Parse JSON Vite manifest
 		manifest := map[string]Chunk{}
