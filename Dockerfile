@@ -56,4 +56,4 @@ USER appuser:appuser
 EXPOSE 8080
 
 WORKDIR /app
-CMD ["./FiberReactTest"]
+CMD ["/app/FiberReactTest"]
