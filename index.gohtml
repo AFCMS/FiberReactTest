@@ -31,6 +31,7 @@
 <body>
     <div id="root"></div>
     {{if .DevMode}}
+        <script type="module" src="/src/main.tsx"></script>
     {{else}}
         <link rel="stylesheet" href="/{{ .MainCSS }}"/>
         <script type="module" src="/{{ .MainJS }}"></script>
