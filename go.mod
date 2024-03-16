@@ -1,9 +1,9 @@
 module FiberReactTest
 
-go 1.21
+go 1.22
 
 require (
-	github.com/gofiber/fiber/v3 v3.0.0-20240305075939-370cc8bdb65b
+	github.com/gofiber/fiber/v3 v3.0.0-20240313181542-df1f877cc0be
 	github.com/gofiber/template/html/v2 v2.1.1
 )
 
