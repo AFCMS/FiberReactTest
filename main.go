@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/gofiber/fiber/v2"
-	flogger "github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/proxy"
+	"github.com/gofiber/fiber/v3"
+	flogger "github.com/gofiber/fiber/v3/middleware/logger"
+	"github.com/gofiber/fiber/v3/middleware/proxy"
 	"github.com/gofiber/template/html/v2"
 	"log"
 	"os"
@@ -15,7 +15,7 @@ func main() {
 	FrontendDevServer := os.Getenv("FIBER_REACT_FRONTEND_SERVER")
 	GoogleSiteVerification := os.Getenv("FIBER_REACT_GOOGLE_SITE_VERIFICATION")
 
-	engine := html.New("./", ".html")
+	engine := html.New("./", ".gohtml")
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
@@ -24,23 +24,27 @@ func main() {
 	// API
 	api := app.Group("/api")
 
-	api.Get("/test", func(c *fiber.Ctx) error {
+	api.Get("/test", func(c fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
 
-	api.All("*", func(ctx *fiber.Ctx) error {
-		return ctx.Status(404).SendString("Not Found")
+	api.All("*", func(c fiber.Ctx) error {
+		return c.Status(fiber.StatusNotFound).SendString("Not Found")
 	})
 
 	if DevMode {
-		templateHandler := func(c *fiber.Ctx) error {
-			return c.Render("index", fiber.Map{
-				"Title":   "Test",
-				"DevMode": DevMode,
-			})
-		}
-		app.Get("*", proxy.BalancerForward([]string{FrontendDevServer}), templateHandler)
-		app.Get("/", templateHandler)
+		app.Get("*", proxy.Balancer(proxy.Config{
+			Servers: []string{FrontendDevServer},
+			ModifyResponse: func(c fiber.Ctx) error {
+				if c.Response().StatusCode() == fiber.StatusNotFound {
+					return c.Status(fiber.StatusOK).Render("index", fiber.Map{
+						"Title":   "Test",
+						"DevMode": DevMode,
+					})
+				}
+				return nil
+			},
+		}))
 	} else {
 		// Parse JSON Vite manifest
 		manifest := map[string]Chunk{}
@@ -48,12 +52,13 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		if err == nil {
-			err = json.Unmarshal(data, &manifest)
+		err = json.Unmarshal(data, &manifest)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 		app.Static("/", "./frontend/dist")
-		app.Get("*", func(c *fiber.Ctx) error {
+		app.Get("*", func(c fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
 				"Title":                  "Test",
 				"DevMode":                DevMode,
