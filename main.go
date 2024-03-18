@@ -52,8 +52,9 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		if err == nil {
-			err = json.Unmarshal(data, &manifest)
+		err = json.Unmarshal(data, &manifest)
+		if err != nil {
+			log.Fatal(err)
 		}
 
 		app.Static("/", "./frontend/dist")
